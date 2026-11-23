@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Mid Term Exam - Quality Assurance of Information Systems (SE202) | Cairo University</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: #eef2f8; color: #1a2540; line-height: 1.4; padding: 16px; touch-action: manipulation; }
+
+    /* ============ CONTAINER THEME (Navy + Gold) ============ */
+    .container {
+      --bg-container: #ffffff; --bg-card: #ffffff; --bg-option: #f5f8fc; --bg-option-hover: #e6eef8;
+      --bg-answer: #fef9ec; --bg-essay-answer: #fef9ec; --bg-toolbar: #e2e8f0; --bg-notes: #f5f8fc;
+      --text-main: #1a2540; --text-strong: #0b1a33; --text-muted: #64748b; --text-option: #2c3a55; --text-rationale: #7c5a08;
+      --border-card: #d6e0ee; --border-note: #b8c8de; --border-option: #d6e0ee;
+      --accent: #d4a017; --accent-2: #f0b429;
+      --correct-bg: #fef9ec; --correct-border: #d4a017; --correct-text: #7c5a08;
+      --incorrect-bg: #fee2e2; --incorrect-border: #ef4444; --incorrect-text: #b91c1c;
+      --shadow: 0 6px 24px rgba(11, 26, 51, 0.15);
+      max-width: 210mm; margin: 0 auto; background: var(--bg-container); padding: 12mm 10mm;
+      box-shadow: var(--shadow); border-radius: 8px; transition: background-color 0.3s, box-shadow 0.3s;
+    }
+    .container.dark-mode {
+      --bg-container: #0b1a33; --bg-card: #0f2240; --bg-option: #0b1a33; --bg-option-hover: #1e3a6b;
+      --bg-answer: #2a1f06; --bg-essay-answer: #2a1f06; --bg-toolbar: #12264a; --bg-notes: #0f2240;
+      --text-main: #e0e8f5; --text-strong: #f8fafc; --text-muted: #94a3b8; --text-option: #cbd5e1; --text-rationale: #ffffff;
+      --border-card: #1e3a6b; --border-note: #1e3a6b; --border-option: #1e3a6b;
+      --accent: #f0b429; --accent-2: #fbbf24;
+      --correct-bg: #2a1f06; --correct-border: #f0b429; --correct-text: #fbbf24;
+      --incorrect-bg: #450a0a; --incorrect-border: #f87171; --incorrect-text: #fca5a5;
+      --shadow: 0 6px 24px rgba(0,0,0,0.6);
+    }
+
+    /* ============ TOOLBAR ============ */
+    .toolbar { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .btn { padding: 9px 14px; font-size: 13px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; }
+    .btn-toggle, .btn-theme { background-color: var(--bg-toolbar); color: var(--text-strong); border: 1px solid var(--border-card); }
+    .btn-toggle:hover, .btn-theme:hover { opacity: 0.85; }
+    .btn-print { background: linear-gradient(135deg, #d4a017 0%, #f0b429 100%); color: #0b1a33; }
+    .btn-print:hover { background: linear-gradient(135deg, #f0b429 0%, #fbbf24 100%); }
+    .btn-dropdown { position: relative; display: inline-block; }
+    .dropdown-content { display: none; position: absolute; right: 0; top: 100%; margin-top: 6px; background-color: var(--bg-card); min-width: 220px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border-radius: 6px; z-index: 100; border: 1px solid var(--border-card); overflow: hidden; }
+    .dropdown-content button { display: block; width: 100%; padding: 10px 14px; text-align: left; background: transparent; border: none; color: var(--text-main); font-size: 12.5px; cursor: pointer; }
+    .dropdown-content button:hover { background: var(--bg-option-hover); }
+    .btn-dropdown:hover .dropdown-content, .btn-dropdown.open .dropdown-content { display: block; }
+
+    /* ============ HEADER ============ */
+    .header { background: linear-gradient(135deg, #060d1c 0%, #0b1a33 40%, #12264a 70%, #1e3a6b 100%); color: #ffffff; border-radius: 8px; padding: 14px 18px; margin-bottom: 14px; border-left: 6px solid #d4a017; position: relative; overflow: hidden; }
+    .header::after { content: ""; position: absolute; top: 0; right: 0; width: 120px; height: 120px; background: radial-gradient(circle, rgba(212,160,23,0.15) 0%, transparent 70%); pointer-events: none; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(212,160,23,0.3); padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+    .institution-info h1 { font-size: 17px; font-weight: 700; letter-spacing: 0.5px; color: #ffffff; }
+    .institution-info h2 { font-size: 13px; font-weight: 500; color: #94a3b8; }
+    .exam-tag { background: rgba(212, 160, 23, 0.15); border: 1px solid #d4a017; color: #f0b429; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .header-details { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font-size: 12px; }
+    .detail-item span { display: block; color: #d4a017; font-size: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+    .detail-item strong { color: #f8fafc; font-size: 12px; }
+
+    /* ============ SECTION DIVIDER ============ */
+    .section-divider { background: linear-gradient(135deg, #0b1a33 0%, #12264a 60%, #1e3a6b 100%); color: #ffffff; padding: 9px 14px; border-radius: 6px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 16px 0 10px 0; display: flex; align-items: center; gap: 8px; border-left: 4px solid #f0b429; break-inside: avoid; }
+    .page-break { page-break-before: always; break-before: page; }
+
+    /* ============ NOTES ============ */
+    .notes-page-container { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 12px; }
+    .notes-card { border: 1.5px solid var(--border-note); border-radius: 8px; padding: 12px 16px; background: var(--bg-notes); break-inside: avoid; }
+    .notes-title { font-size: 13.5px; font-weight: 700; color: var(--text-strong); margin-bottom: 8px; border-bottom: 2px solid var(--accent); padding-bottom: 4px; }
+    .notes-grid { display: grid; grid-template-columns: 1fr; gap: 8px; font-size: 12px; color: var(--text-option); }
+    .notes-item { display: flex; gap: 8px; align-items: baseline; }
+    .notes-bullet { color: var(--accent); font-weight: bold; }
+
+    /* ============ QUESTION CARDS ============ */
+    .question-list { display: flex; flex-direction: column; gap: 10px; }
+    .question-card { border: 1.5px solid var(--border-card); border-radius: 8px; padding: 12px 14px; background: var(--bg-card); break-inside: avoid; page-break-inside: avoid; position: relative; transition: background-color 0.3s, border-color 0.3s; }
+    .question-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+    .q-number { background: linear-gradient(135deg, #0b1a33 0%, #1e3a6b 100%); color: #ffffff; font-weight: 700; font-size: 12px; padding: 3px 8px; border-radius: 4px; flex-shrink: 0; border: 1px solid #d4a017; }
+    .container.dark-mode .q-number { color: #0b1a33; background: linear-gradient(135deg, #f0b429 0%, #fbbf24 100%); border-color: #f0b429; }
+    
+    .exam-origin { background: #eef4fb; color: #1e3a6b; padding: 1px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 600; border: 1px solid #b8c8de; flex-shrink: 0; }
+    .container.dark-mode .exam-origin { background: #12264a; color: #f0b429; border-color: #1e3a6b; }
+    .q-text { font-size: 13.5px; font-weight: 600; color: var(--text-strong); line-height: 1.4; width: 100%; margin-top: 3px; }
+    
+    .reset-btn { background: var(--bg-option); color: var(--text-muted); border: 1px solid var(--border-option); border-radius: 50%; width: 28px; height: 28px; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; margin-left: auto; font-weight: 700; padding: 0; transition: all 0.2s; }
+    .reset-btn:hover { background: #d4a017; color: #0b1a33; border-color: #d4a017; }
+
+    /* ============ OPTIONS ============ */
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 10px; margin-bottom: 6px; }
+    .options-grid.tf-grid { grid-template-columns: repeat(2, 1fr); max-width: 420px; }
+    .option-item { font-size: 12px; color: var(--text-option); background: var(--bg-option); padding: 8px 12px; border-radius: 5px; border: 1.5px solid var(--border-option); cursor: pointer; user-select: none; transition: all 0.15s ease; display: flex; align-items: center; min-height: 34px; }
+    .option-item:hover { background: var(--bg-option-hover); border-color: #d4a017; }
+    .option-item.correct { background-color: var(--correct-bg) !important; border-color: var(--correct-border) !important; color: var(--correct-text) !important; font-weight: 600; box-shadow: 0 0 0 2px rgba(212, 160, 23, 0.25); }
+    .option-item.correct .option-letter { color: var(--correct-text) !important; }
+    .option-item.incorrect { background-color: var(--incorrect-bg) !important; border-color: var(--incorrect-border) !important; color: var(--incorrect-text) !important; font-weight: 600; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25); text-decoration: line-through; text-decoration-color: rgba(239, 68, 68, 0.5); }
+    .option-item.incorrect .option-letter { color: var(--incorrect-text) !important; }
+    .option-letter { font-weight: 700; color: #1e3a6b; margin-right: 6px; flex-shrink: 0; }
+    .container.dark-mode .option-letter { color: #f0b429; }
+
+    /* ============ ANSWER BOX ============ */
+    .answer-box { background: var(--bg-answer); border-left: 4px solid #d4a017; padding: 7px 12px; border-radius: 4px; font-size: 12px; margin-top: 8px; display: none; }
+    .answer-box.visible { display: block; }
+    .answer-title { color: var(--correct-text); font-weight: 700; margin-bottom: 3px; font-size: 12.5px; }
+    .rationale { color: var(--text-rationale); font-size: 12px; line-height: 1.45; }
+
+    /* ============ ESSAY ============ */
+    .essay-card { border: 1.5px solid var(--border-note); border-radius: 8px; padding: 14px 16px; background: var(--bg-card); break-inside: avoid; page-break-inside: avoid; margin-bottom: 10px; }
+    .essay-answer { background: var(--bg-essay-answer); border-left: 4px solid #d4a017; padding: 10px 14px; border-radius: 4px; margin-top: 10px; font-size: 12.5px; color: var(--text-rationale); line-height: 1.5; }
+    .essay-answer .essay-points { margin-top: 6px; padding-left: 18px; color: var(--text-rationale); }
+    .essay-answer .essay-points li { margin-bottom: 6px; }
+    .table-responsive { width: 100%; overflow-x: auto; margin-top: 8px; }
+    .essay-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 480px; }
+    .essay-table th, .essay-table td { border: 1px solid var(--border-note); padding: 7px 10px; text-align: left; vertical-align: top; color: var(--text-option); }
+    .essay-table th { background-color: var(--bg-option); color: var(--text-strong); font-weight: 700; }
+
+    /* ============ FOOTER ============ */
+    .footer { margin-top: 24px; padding-top: 10px; border-top: 1.5px solid var(--border-note); display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--text-muted); break-inside: avoid; flex-wrap: wrap; gap: 8px; }
+    .author-badge { font-weight: 700; color: #1e3a6b; }
+    .container.dark-mode .author-badge { color: #f0b429; }
+
+    /* ============ DARK MODE ADJUSTMENTS ============ */
+    .container.dark-mode .answer-box,
+    .container.dark-mode .answer-box .answer-title,
+    .container.dark-mode .answer-box .rationale,
+    .container.dark-mode .answer-box .rationale strong,
+    .container.dark-mode .essay-answer,
+    .container.dark-mode .essay-answer *,
+    .container.dark-mode .essay-answer .essay-points,
+    .container.dark-mode .essay-answer .essay-points li {
+      color: #ffffff !important;
+    }
+    .container.dark-mode .essay-answer .essay-table th { background-color: #1e3a6b !important; color: #ffffff !important; }
+    .container.dark-mode .essay-answer .essay-table td { border-color: #334155 !important; color: #ffffff !important; }
+
+    /* ============ RESPONSIVE ============ */
+    @media screen and (max-width: 768px) {
+      .options-grid { grid-template-columns: 1fr; }
+      .header-details { grid-template-columns: 1fr 1fr; }
+      .toolbar { justify-content: center; }
+      .btn { padding: 8px 12px; font-size: 12px; }
+      .container { padding: 8mm 5mm; }
+    }
+    @media screen and (max-width: 420px) { .header-details { grid-template-columns: 1fr; } }
+
+    /* ============ PRINT ============ */
+    @media print {
+      @page { size: A4 portrait; margin: 8mm 6mm; }
+      body { background: #ffffff !important; padding: 0 !important; color: #000 !important; }
+      .container { box-shadow: none !important; max-width: 100% !important; padding: 0 !important; background: #ffffff !important; }
+      .no-print { display: none !important; }
+      .question-card, .essay-card, .notes-card { border-color: #cbd5e1 !important; break-inside: avoid !important; page-break-inside: avoid !important; margin-bottom: 8px !important; padding: 8px 10px !important; background: #ffffff !important; }
+      .options-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 4px 8px !important; }
+      .option-item { font-size: 9.5pt !important; padding: 4px 8px !important; min-height: auto !important; background: #f8fafc !important; color: #000 !important; border-color: #cbd5e1 !important; }
+      .option-item.correct { background: #fef9ec !important; border-color: #d4a017 !important; color: #7c5a08 !important; box-shadow: none !important; text-decoration: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .option-item.incorrect { background: #fee2e2 !important; border-color: #ef4444 !important; color: #b91c1c !important; box-shadow: none !important; text-decoration: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .answer-box, .essay-answer { background: #fef9ec !important; color: #7c5a08 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .answer-title, .rationale, .essay-answer .essay-points { color: #7c5a08 !important; }
+      .q-text { color: #000 !important; }
+      .option-letter { color: #1e3a6b !important; }
+      .reset-btn { display: none !important; }
+      .section-divider { background: linear-gradient(135deg, #0b1a33 0%, #1e3a6b 100%) !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .q-number, .exam-origin { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+    body.print-with-answers .answer-box,
+    body.print-with-answers .essay-answer { display: block !important; }
+    body.print-without-answers .answer-box,
+    body.print-without-answers .essay-answer { display: none !important; }
+    body.print-without-answers .option-item.correct,
+    body.print-without-answers .option-item.incorrect {
+      background: var(--bg-option) !important; border-color: var(--border-option) !important;
+      color: var(--text-option) !important; font-weight: normal !important;
+      box-shadow: none !important; text-decoration: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="mainContainer">
+
+    <!-- Toolbar -->
+    <div class="toolbar no-print">
+      <button class="btn btn-toggle" id="toggleAllBtn" onclick="toggleAllAnswers()">👁️ Show All Answers</button>
+      <button class="btn btn-theme" onclick="toggleTheme()" id="themeBtn">🌙 Dark Mode</button>
+      <div class="btn-dropdown" id="printDropdown">
+        <button class="btn btn-print" onclick="togglePrintDropdown(event)">🖨️ Print / PDF ▾</button>
+        <div class="dropdown-content">
+          <button onclick="printMode('with')">🖨️ Print WITH Answers</button>
+          <button onclick="printMode('without')">🖨️ Print WITHOUT Answers</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-top">
+        <div class="institution-info">
+          <h1>Cairo University — Faculty of Graduate Studies for Advanced Research</h1>
+          <h2>Master of Science in Software Engineering | Academic Year 2026 / 2027 (First Semester)</h2>
+        </div>
+        <div class="exam-tag">Mid Term Exam (15 Marks)</div>
+      </div>
+      <div class="header-details">
+        <div class="detail-item">
+          <span>Course Title &amp; Code</span>
+          <strong>QA of Information Systems (SE202)</strong>
+        </div>
+        <div class="detail-item">
+          <span>Instructor</span>
+          <strong>Dr. Nesrine Ali</strong>
+        </div>
+        <div class="detail-item">
+          <span>Exam Timing &amp; Duration</span>
+          <strong>21/11/2026 | 9:30–11:00 am (90 Mins)</strong>
+        </div>
+        <div class="detail-item">
+          <span>Structure &amp; Rules</span>
+          <strong>3 Parts (MCQ, T/F, Essay) | All Obligatory</strong>
+        </div>
+      </div>
+    </header>
+
+    <!-- VIP Notes -->
+    <div class="section-divider">VIP Notes: Core Software Quality &amp; V&amp;V Concepts</div>
+    <div class="notes-page-container">
+      <section class="notes-card">
+        <div class="notes-title">QUALITY ASSURANCE &amp; TESTING FOUNDATIONS (KEY PRINCIPLES)</div>
+        <div class="notes-grid">
+          <div class="notes-item"><span class="notes-bullet">✦</span> <div><strong>SQA vs QC vs Testing:</strong> SQA is process-oriented &amp; preventive across the full SDLC; QC is product-oriented inspection verifying deliverables against standards; Testing executes the software to detect runtime faults.</div></div>
+          <div class="notes-item"><span class="notes-bullet">✦</span> <div><strong>Defect Chain:</strong> Human Error (mental mistake) &rarr; Fault / Bug (flaw encoded in source/spec) &rarr; Failure (dynamic deviation from required behavior during execution). A fault may remain dormant!</div></div>
+          <div class="notes-item"><span class="notes-bullet">✦</span> <div><strong>IEEE 1012 V&amp;V:</strong> <em>Verification:</em> "Are we building the product right?" (Conformance to specifications, static reviews); <em>Validation:</em> "Are we building the right product?" (Fulfilling customer/user true operational needs).</div></div>
+          <div class="notes-item"><span class="notes-bullet">✦</span> <div><strong>Quality Models:</strong> McCall categorizes factors into Product Operation, Product Revision (Maintainability, Flexibility, Testability), and Product Transition. ISO/IEC 25010 modernizes this for web/cloud services (Security, Compatibility, Performance Efficiency).</div></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Part I: MCQs -->
+    <div class="section-divider page-break">Part I: Multiple Choice Questions (5 Marks)</div>
+    <main class="question-list">
+
+      <!-- Q1 -->
+      <article class="question-card" data-correct="C">
+        <div class="question-header">
+          <span class="q-number">Q1</span>
+          <span class="exam-origin">[Midterm 2026]</span>
+          <p class="q-text">Which of the following best distinguishes Software Quality Assurance (SQA) from Software Quality Control (QC)?</p>
+          <button class="reset-btn no-print" onclick="resetQuestion(this)" title="Reset">↺</button>
+        </div>
+        <div class="options-grid">
+          <div class="option-item" data-opt="A"><span class="option-letter">a)</span> SQA focuses on identifying defects in the final executable product, whereas QC focuses on establishing coding standards.</div>
+          <div class="option-item" data-opt="B"><span class="option-letter">b)</span> SQA is product-oriented and detects bugs at the testing stage, whereas QC is process-oriented and prevents defects from the start.</div>
+          <div class="option-item" data-opt="C"><span class="option-letter">c)</span> SQA is process-oriented, spanning the entire lifecycle to prevent defects, whereas QC is product-oriented, evaluating deliverables against standards before release.</div>
+          <div class="option-item" data-opt="D"><span class="option-letter">d)</span> SQA and QC are synonymous terms used interchangeably to describe execution-based testing activities.</div>
+        </div>
+        <div class="answer-box">
+          <div class="answer-title">✓ Correct Answer: C</div>
+          <p class="rationale"><strong>Rationale:</strong> SQA is proactive and process-driven, focusing on managerial and engineering processes across the entire SDLC to prevent defects. In contrast, QC is product-driven, using inspections, reviews, and tests to evaluate final deliverables and ensure they conform to requirements before release.</p>
+        </div>
+      </article>
+
+      <!-- Q2 -->
+      <article class="question-card" data-correct="C">
+        <div class="question-header">
+          <span class="q-number">Q2</span>
+          <span class="exam-origin">[Midterm 2026]</span>
+          <p class="q-text">According to McCall’s Quality Model, which of the following quality factors belong exclusively to the <u>Product Revision</u> category?</p>
+          <button class="reset-btn no-print" onclick="resetQuestion(this)" title="Reset">↺</button>
+        </div>
+        <div class="options-grid">
+          <div class="option-item" data-opt="A"><span class="option-letter">a)</span> Correctness, Reliability, Efficiency</div>
+          <div class="option-item" data-opt="B"><span class="option-letter">b)</span> Portability, Reusability, Interoperability</div>
+          <div class="option-item" data-opt="C"><span class="option-letter">c)</span> Maintainability, Flexibility, Testability</div>
+          <div class="option-item" data-opt="D"><span class="option-letter">d)</span> Usability, Integrity, Safety</div>
+        </div>
+        <div class="answer-box">
+          <div class="answer-title">✓ Correct Answer: C</div>
+          <p class="rationale"><strong>Rationale:</strong> McCall's model divides factors into three perspectives: (1) <em>Product Operation</em> (Correctness, Reliability, Efficiency, Integrity, Usability), (2) <em>Product Revision</em> (Maintainability, Flexibility, Testability), and (3) <em>Product Transition</em> (Portability, Reusability, Interoperability).</p>
+        </div>
+      </article>
+
+      <!-- Q3 -->
+      <article class="question-card" data-correct="B">
+        <div class="question-header">
+          <span class="q-number">Q3</span>
+          <span class="exam-origin">[Midterm 2026]</span>
+          <p class="q-text">In the context of the software error-fault-failure chain, which statement is scientifically most accurate?</p>
+          <button class="reset-btn no-print" onclick="resetQuestion(this)" title="Reset">↺</button>
+        </div>
+        <div class="options-grid">
+          <div class="option-item" data-opt="A"><span class="option-letter">a)</span> Every software error immediately causes a software fault, and every fault results in a system failure.</div>
+          <div class="option-item" data-opt="B"><span class="option-letter">b)</span> A software error is a human action resulting in an incorrect result, a fault is the adjudged cause of an error in the code, and a failure occurs only when that fault is executed and activated under specific conditions.</div>
+          <div class="option-item" data-opt="C"><span class="option-letter">c)</span> A failure is a human mistake made during requirements gathering, while a fault is a dynamic runtime exception.</div>
+          <div class="option-item" data-opt="D"><span class="option-letter">d)</span> Errors and faults can only be detected through dynamic execution testing, whereas failures are identified through static code reviews.</div>
+        </div>
+        <div class="answer-box">
+          <div class="answer-title">✓ Correct Answer: B</div>
+          <p class="rationale"><strong>Rationale:</strong> According to IEEE/ISO terminology, an Error is a human cognitive mistake. A Fault (bug/defect) is the physical manifestation of that error in software artifacts. A Failure is an observable dynamic deviation from expected behavior, which occurs only if the fault is activated during program execution.</p>
+        </div>
+      </article>
+
+      <!-- Q4 -->
+      <article class="question-card" data-correct="B">
+        <div class="question-header">
+          <span class="q-number">Q4</span>
+          <span class="exam-origin">[Midterm 2026]</span>
+          <p class="q-text">When evaluating software deliverables, a team conducts a requirements walkthrough and checks design documents for completeness and consistency without executing code. This activity is best classified as:</p>
+          <button class="reset-btn no-print" onclick="resetQuestion(this)" title="Reset">↺</button>
+        </div>
+        <div class="options-grid">
+          <div class="option-item" data-opt="A"><span class="option-letter">a)</span> Dynamic validation testing</div>
+          <div class="option-item" data-opt="B"><span class="option-letter">b)</span> Verification</div>
+          <div class="option-item" data-opt="C"><span class="option-letter">c)</span> Quality Control bug tracking</div>
+          <div class="option-item" data-opt="D"><span class="option-letter">d)</span> Performance stress testing</div>
+        </div>
+        <div class="answer-box">
+          <div class="answer-title">✓ Correct Answer: B</div>
+          <p class="rationale"><strong>Rationale:</strong> Static analysis activities such as peer reviews, inspections, and walkthroughs of intermediate lifecycle deliverables (requirements, design docs) evaluate conformance to standards without code execution, which constitutes static <em>Verification</em>.</p>
+        </div>
+      </article>
+
+      <!-- Q5 -->
+      <article class="question-card" data-correct="C">
+        <div class="question-header">
+          <span class="q-number">Q5</span>
+          <span class="exam-origin">[Midterm 2026]</span>
+          <p class="q-text">Why would an enterprise development team choose the <u>ISO/IEC 25010</u> quality model over McCall's classic model for modern cloud-native microservices architecture?</p>
+          <button class="reset-btn no-print" onclick="resetQuestion(this)" title="Reset">↺</button>
+        </div>
+        <div class="options-grid">
+          <div class="option-item" data-opt="A"><span class="option-letter">a)</span> ISO/IEC 25010 is obsolete and only used for legacy desktop applications.</div>
+          <div class="option-item" data-opt="B"><span class="option-letter">b)</span> McCall's model includes explicit sub-characteristics for Security, Compatibility, and distributed Performance Efficiency required by modern SaaS systems.</div>
+          <div class="option-item" data-opt="C"><span class="option-letter">c)</span> ISO/IEC 25010 provides modern characteristics and sub-characteristics (such as Security, Compatibility, and Performance Efficiency) specifically suited for distributed and web-based environments.</div>
+          <div class="option-item" data-opt="D"><span class="option-letter">d)</span> ISO/IEC 25010 eliminates the need for any formal software testing or quality assurance plans.</div>
+        </div>
+        <div class="answer-box">
+          <div class="answer-title">✓ Correct Answer: C</div>
+          <p class="rationale"><strong>Rationale:</strong> ISO/IEC 25010 replaces ISO 9126 and expands McCall's model by establishing explicit, refined characteristics critical for distributed and cloud architectures—notably Security (Confidentiality, Integrity, Non-repudiation), Compatibility (Coexistence, Interoperability), and Performance Efficiency (Time behavior, Resource utilization).</p>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- Part II: True or False -->
+    <div class="section-divider page-break">Part II: True or False Questions (5 Marks)</div>
+    <main class="question-list">
+
+      <!-- TF 1 -->
+      <article class="question-card" data-correct="B">
+        <div class="question-header">
+          <span class="q-number">TF 1</span>
+          <span class="exam-origin">[Midterm 2026]</span>
+          <p class="q-text">Software Quality Assurance (SQA) is primarily a post-hoc inspection gate applied right before software deployment.</p>
+          <button class="reset-btn no-print" onclick="resetQuestion(this)" title="Reset">↺</button>
+        </div>
+        <div class="options-grid tf-grid">
+          <div class="option-item" data-opt="A"><span class="option-letter">A)</span> True</div>
+          <div class="option-item" data-opt="B"><span class="option-letter">B)</span> False</div>
+        </div>
+        <div class="answer-box">
+          <div class="answer-title">✓ Correct Answer: B (False)</div>
+          <p class="rationale"><strong>Rationale:</strong> SQA is an ongoing, preventive umbrella activity integrated throughout all SDLC stages, not merely an end-of-pipe or post-hoc inspection gate before deployment (which describes late Quality Control/Release Acceptance).</p>
+        </div>
+      </article>
+
+      <!-- TF 2 -->
+      <article class="question-card" data-correct="A">
+        <div class="question-header">
+          <span class="q-number">TF 2</span>
+          <span class="exam-origin">[Midterm 2026]</span>
+          <p class="q-text">In static testing, developers and testers evaluate work products such as requirements, user stories, and source code without executing the component or system.</p>
+          <button class="reset-btn no-print" onclick="resetQuestion(this)" title="Reset">↺</button>
+        </div>
+        <div class="options-grid tf-grid">
+          <div class="option-item" data-opt="A"><span class="option-letter">A)</span> True</div>
+          <div class="option-item" data-opt="B"><span class="option-letter">B)</span> False</div>
+        </div>
+        <div class="answer-box">
+          <div class="answer-title">✓ Correct Answer: A (True)</div>
+          <p class="rationale"><strong>Rationale:</strong> By definition, static testing relies on manual examinations (reviews, inspections, walkthroughs) and tool-based static analysis of code and documentation without dynamic CPU execution.</p>
+        </div>
+      </article>
+
+      <!-- TF 3 -->
+      <article class="question-card" data-correct="B">
+        <div class="question-header">
+          <span class="q-number">TF 3</span>
+          <span class="exam-origin">[Midterm 2026]</span>
+          <p class="q-text">According to IEEE 1012, verification answers the question "Are we building the right product?", while validation answers "Are we building the product right?".</p>
+          <button class="reset-btn no-print" onclick="resetQuestion(this)" title="Reset">↺</button>
+        </div>
+        <div class="options-grid tf-grid">
+          <div class="option-item" data-opt="A"><span class="option-letter">A)</span> True</div>
+          <div class="option-item" data-opt="B"><span class="option-letter">B)</span> False</div>
+        </div>
+        <div class="answer-box">
+          <div class="answer-title">✓ Correct Answer: B (False)</div>
+          <p class="rationale"><strong>Rationale:</strong> The definitions are reversed. Verification evaluates whether deliverables conform to specified requirements ("Are we building the product <em>right</em>?"), whereas Validation evaluates whether the system satisfies its intended operational use and user needs ("Are we building the <em>right</em> product?").</p>
+        </div>
+      </article>
+
+      <!-- TF 4 -->
+      <article class="question-card" data-correct="A">
+        <div class="question-header">
+          <span class="q-number">TF 4</span>
+          <span class="exam-origin">[Midterm 2026]</span>
+          <p class="q-text">A software fault may remain completely dormant and undetected in the code for a long time until a specific event or input activates it.</p>
+          <button class="reset-btn no-print" onclick="resetQuestion(this)" title="Reset">↺</button>
+        </div>
+        <div class="options-grid tf-grid">
+          <div class="option-item" data-opt="A"><span class="option-letter">A)</span> True</div>
+          <div class="option-item" data-opt="B"><span class="option-letter">B)</span> False</div>
+        </div>
+        <div class="answer-box">
+          <div class="answer-title">✓ Correct Answer: A (True)</div>
+          <p class="rationale"><strong>Rationale:</strong> A fault is static code defect. Unless test cases or operational inputs execute that exact branch or condition under activating environmental states, the fault remains dormant and produces no observable system failure.</p>
+        </div>
+      </article>
+
+      <!-- TF 5 -->
+      <article class="question-card" data-correct="A">
+        <div class="question-header">
+          <span class="q-number">TF 5</span>
+          <span class="exam-origin">[Midterm 2026]</span>
+          <p class="q-text">ISO 9001 is a widely used standard that provides guidelines for establishing a Quality Management System (QMS) to ensure consistent quality in products and services.</p>
+          <button class="reset-btn no-print" onclick="resetQuestion(this)" title="Reset">↺</button>
+        </div>
+        <div class="options-grid tf-grid">
+          <div class="option-item" data-opt="A"><span class="option-letter">A)</span> True</div>
+          <div class="option-item" data-opt="B"><span class="option-letter">B)</span> False</div>
+        </div>
+        <div class="answer-box">
+          <div class="answer-title">✓ Correct Answer: A (True)</div>
+          <p class="rationale"><strong>Rationale:</strong> ISO 9001 sets out the criteria for an organization-wide Quality Management System (QMS) based on process orientation, continuous improvement, and customer satisfaction.</p>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- Part III: Essay Questions -->
+    <div class="section-divider page-break">Part III: Essay Questions &amp; Model Answers (5 Marks)</div>
+    <main class="question-list">
+
+      <!-- Essay 1 -->
+      <article class="essay-card">
+        <span class="q-number">E1</span>
+        <p class="q-text">Compare and contrast Software Quality Assurance (SQA), Quality Control (QC), and Software Testing in terms of: (1) Primary focus (Process vs. Product), (2) Timing across the SDLC, and (3) Primary responsibility (Who performs them).</p>
+        <div class="essay-answer">
+          <div class="table-responsive">
+            <table class="essay-table">
+              <thead>
+                <tr>
+                  <th>Comparison Dimension</th>
+                  <th>Software Quality Assurance (SQA)</th>
+                  <th>Quality Control (QC)</th>
+                  <th>Software Testing</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1. Primary Focus</strong></td>
+                  <td><strong>Process-oriented:</strong> Defect prevention by defining, tailoring, auditing, and improving lifecycle processes and standards.</td>
+                  <td><strong>Product-oriented:</strong> Defect detection and verification of deliverables against established requirements before release.</td>
+                  <td><strong>Execution-oriented:</strong> Sub-activity of QC focused on running code with specific test cases to observe runtime failures.</td>
+                </tr>
+                <tr>
+                  <td><strong>2. Timing across SDLC</strong></td>
+                  <td><strong>Entire SDLC:</strong> Continuous from project inception, requirements engineering, through development, deployment, and maintenance.</td>
+                  <td><strong>Milestones / Pre-release:</strong> Applied at specific review gates and completion of intermediate/final deliverables.</td>
+                  <td><strong>Build &amp; Integration Phase:</strong> Dynamic testing happens once executable modules/builds exist (alongside early test design).</td>
+                </tr>
+                <tr>
+                  <td><strong>3. Primary Responsibility</strong></td>
+                  <td><strong>SQA Team &amp; Process Owners:</strong> Independent SQA engineers, process auditors, and project leadership.</td>
+                  <td><strong>QC Reviewers &amp; Inspection Teams:</strong> Peer reviewers, technical leads, and inspection panels.</td>
+                  <td><strong>Test Engineers &amp; Developers:</strong> Dedicated QA testers, automation engineers, and developers (unit/integration tests).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+      <!-- Essay 2 -->
+      <article class="essay-card">
+        <span class="q-number">E2</span>
+        <p class="q-text">Examine the lifecycle of a software defect by explaining the progression from Error to Fault to Failure.</p>
+        <div class="essay-answer">
+          <ul class="essay-points">
+            <li><strong>1. Error (Mistake / Human Action):</strong> A psychological or cognitive human mistake made by a software engineer, analyst, or architect during requirements drafting, design modeling, or code implementation (e.g., misinterpreting an off-by-one loop condition or arithmetic boundary).</li>
+            <li><strong>2. Fault (Defect / Bug):</strong> The physical manifestation and internal consequence of an error encoded into a software artifact (source code, documentation, or configuration file). A fault is passive and can lie <em>dormant</em> indefinitely without causing issues if the affected code path is not triggered.</li>
+            <li><strong>3. Failure (Dynamic Deviation):</strong> The dynamic, observable departure of the operational software system from its required or expected behavior. A failure occurs <em>if and only if</em> the dormant fault is executed, activated by specific input parameters and system states, and produces an erroneous external state.</li>
+            <li><strong>Summary Progression:</strong> <code>Human Error &rarr; Injects Fault into Artifact &rarr; [Execution &amp; Trigger] &rarr; Observable System Failure</code>.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Essay 3 -->
+      <article class="essay-card">
+        <span class="q-number">E3</span>
+        <p class="q-text">Clearly differentiate between Testing and Debugging in terms of their objectives and who performs them upon encountering an anomaly.</p>
+        <div class="essay-answer">
+          <div class="table-responsive">
+            <table class="essay-table">
+              <thead>
+                <tr>
+                  <th>Attribute</th>
+                  <th>Software Testing</th>
+                  <th>Debugging</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Primary Objective</strong></td>
+                  <td>To discover faults and anomalies by purposefully provoking failures through systematic execution against expected results, assessing overall product quality and conformance.</td>
+                  <td>To investigate, localize the exact root cause of the known failure (locating the dormant fault in the code), design a fix, and repair/re-factor the code to remove the bug.</td>
+                </tr>
+                <tr>
+                  <td><strong>Who Performs It?</strong></td>
+                  <td>Performed primarily by <strong>Software Test Engineers / QA Specialists</strong> (independent verification role) as well as developers during unit testing.</td>
+                  <td>Performed exclusively by <strong>Software Developers / Programmers</strong> who have code access and architectural domain expertise.</td>
+                </tr>
+                <tr>
+                  <td><strong>Workflow Position</strong></td>
+                  <td>Precedes debugging: Testing identifies and logs the failure incident into a defect tracking system.</td>
+                  <td>Triggered by testing: Developers take the bug report, reproduce the symptom, step through code, patch it, and submit for re-testing.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+      <!-- Essay 4 -->
+      <article class="essay-card">
+        <span class="q-number">E4</span>
+        <p class="q-text">Discuss the concept of the "Two Faces of Software Quality": Quality of Design and Quality of Conformance. Define both terms and list the core activities associated with each face.</p>
+        <div class="essay-answer">
+          <ul class="essay-points">
+            <li><strong>1. Quality of Design:</strong>
+              <br>&bull; <em>Definition:</em> Reflects how well the requirements, system architecture, specifications, and grade of the product meet customer expectations, domain constraints, and user experience objectives.
+              <br>&bull; <em>Core Activities:</em> Requirements elicitation &amp; analysis, market research, usability and UX modeling, architectural design trade-off analysis, formal specification reviews, and establishing robust design patterns.
+            </li>
+            <li><strong>2. Quality of Conformance:</strong>
+              <br>&bull; <em>Definition:</em> The degree to which the implemented code, executable software, and end product faithfully adhere to the agreed-upon design specifications, standards, and engineering guidelines.
+              <br>&bull; <em>Core Activities:</em> Code reviews, static code analysis, unit/integration/system testing, compliance audits, continuous integration pipelines, and defect management.
+            </li>
+            <li><strong>Key Principle:</strong> Excellent conformance cannot rescue a fundamentally flawed design, and a brilliant design is rendered useless if the implementation lacks conformance. Both faces are essential for software success.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Essay 5 -->
+      <article class="essay-card">
+        <span class="q-number">E5</span>
+        <p class="q-text">Define Verification and Validation (V&amp;V) in software engineering: (a) Contrast their objectives, timing, and whether they rely primarily on static or dynamic analysis techniques. (b) Discuss the economic impact of delaying validation activities until late in the development cycle versus integrating them continuously.</p>
+        <div class="essay-answer">
+          <ul class="essay-points">
+            <li><strong>Part (a): Contrast of Verification &amp; Validation</strong>
+              <div class="table-responsive">
+                <table class="essay-table">
+                  <thead>
+                    <tr><th>Parameter</th><th>Verification</th><th>Validation</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><strong>Governing Question</strong></td><td><em>"Are we building the product right?"</em></td><td><em>"Are we building the right product?"</em></td></tr>
+                    <tr><td><strong>Core Objective</strong></td><td>Ensure deliverables strictly conform to the specifications and inputs established in preceding lifecycle phases.</td><td>Ensure the integrated software fulfills the actual customer requirements, operational workflows, and intended use.</td></tr>
+                    <tr><td><strong>Techniques</strong></td><td>Primarily <strong>Static Analysis:</strong> Inspections, code reviews, walkthroughs, and static analysis tools.</td><td>Primarily <strong>Dynamic Testing:</strong> System testing, acceptance testing (UAT), alpha/beta releases, and operational testing.</td></tr>
+                    <tr><td><strong>Timing</strong></td><td>Continuous across every SDLC phase from requirements to implementation.</td><td>Traditionally evaluated upon executable build completion, but increasingly integrated continuously.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </li>
+            <li><strong>Part (b): Economic Impact (Cost of Quality &amp; Boehm's Law)</strong>
+              <br>&bull; <strong>The Cost of Change Escalation:</strong> According to Boehm's cost-of-change curve, the cost of remediating a defect escalates exponentially (up to 50&times; to 100&times;) when an architectural or requirement misconception is detected late during final system validation or post-deployment compared to early detection.
+              <br>&bull; <strong>Delaying Validation Risk:</strong> Deferring validation until final delivery introduces severe risks of "building the wrong system perfectly" (high conformance to flawed requirements), resulting in catastrophic redesigns, blown budgets, schedule slippages, and potential project abandonment.
+              <br>&bull; <strong>Continuous Validation Benefit:</strong> Integrating early, continuous validation (via rapid prototyping, agile user story acceptance, and continuous deployment feedback) catches misalignments immediately, lowering the cost of rework, shortening time-to-market, and maximizing ROI.
+            </li>
+          </ul>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-left">Cairo University — Faculty of Graduate Studies for Advanced Research | Dept. of Software Engineering</div>
+      <div class="footer-signature">Instructor: <span class="author-badge">Dr. Nesrine Ali</span></div>
+    </footer>
+
+  </div>
+
+  <!-- JavaScript Engine -->
+  <script>
+    /* ============ THEME CONTROLLER ============ */
+    function toggleTheme() {
+      const container = document.getElementById('mainContainer');
+      container.classList.toggle('dark-mode');
+      const isDark = container.classList.contains('dark-mode');
+      document.getElementById('themeBtn').textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+      try { localStorage.setItem('se202-exam-theme', isDark ? 'dark' : 'light'); } catch(e) {}
+    }
+    (function initTheme() {
+      try {
+        const saved = localStorage.getItem('se202-exam-theme');
+        if (saved === 'dark') {
+          document.getElementById('mainContainer').classList.add('dark-mode');
+          document.getElementById('themeBtn').textContent = '☀️ Light Mode';
+        }
+      } catch(e) {}
+    })();
+
+    /* ============ TOGGLE ALL ANSWERS ============ */
+    let allVisible = false;
+    function toggleAllAnswers() {
+      allVisible = !allVisible;
+      document.querySelectorAll('.answer-box').forEach(box => { box.classList.toggle('visible', allVisible); });
+      document.querySelectorAll('.essay-answer').forEach(box => { box.style.display = allVisible ? 'block' : 'none'; });
+      document.getElementById('toggleAllBtn').textContent = allVisible ? '🙈 Hide All Answers' : '👁️ Show All Answers';
+    }
+
+    /* ============ MCQ & TF INTERACTIVITY ============ */
+    document.querySelectorAll('.question-card').forEach(card => {
+      const correctOpt = card.getAttribute('data-correct');
+      const options = card.querySelectorAll('.option-item');
+      const answerBox = card.querySelector('.answer-box');
+
+      options.forEach(opt => {
+        opt.addEventListener('click', function() {
+          if (card.dataset.solved === 'true') return;
+          if (this.classList.contains('correct') || this.classList.contains('incorrect')) return;
+          const selected = this.getAttribute('data-opt');
+          if (selected === correctOpt) {
+            this.classList.add('correct');
+            card.dataset.solved = 'true';
+            if (answerBox) answerBox.classList.add('visible');
+          } else {
+            this.classList.add('incorrect');
+          }
+        });
+      });
+    });
+
+    /* ============ RESET INDIVIDUAL QUESTION ============ */
+    function resetQuestion(btn) {
+      const card = btn.closest('.question-card');
+      card.querySelectorAll('.option-item').forEach(o => o.classList.remove('correct', 'incorrect'));
+      const box = card.querySelector('.answer-box');
+      if (box) box.classList.remove('visible');
+      card.dataset.solved = 'false';
+    }
+
+    /* ============ PRINT CONTROLLER ============ */
+    function togglePrintDropdown(e) { e.stopPropagation(); document.getElementById('printDropdown').classList.toggle('open'); }
+    document.addEventListener('click', function() { document.getElementById('printDropdown').classList.remove('open'); });
+
+    function printMode(mode) {
+      document.body.classList.remove('print-with-answers', 'print-without-answers');
+      document.body.classList.add(mode === 'with' ? 'print-with-answers' : 'print-without-answers');
+      window.print();
+      setTimeout(() => { document.body.classList.remove('print-with-answers', 'print-without-answers'); }, 1000);
+    }
+  </script>
+</body>
+</html>
